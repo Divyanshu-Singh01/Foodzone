@@ -1,0 +1,31 @@
+/* ========================================================
+   FoodZone - Customer & Catalog Modular Stylesheet
+   ======================================================== */
+
+@import url('main.css');
+
+/* Enhanced Menu Card Hover & Animation */
+.food-card {
+    will-change: transform, box-shadow;
+}
+
+.food-card .food-title {
+    color: var(--dark);
+    font-weight: 700;
+}
+
+/* Category Filter Active Indicator */
+.cat-pill.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+/* Cart Specific Enhancements */
+.cart-item {
+    transition: background-color 0.2s ease;
+}
+
+.cart-item:hover {
+    background-color: var(--gray-50);
+}

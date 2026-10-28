@@ -1,0 +1,29 @@
+/* ========================================================
+   FoodZone - Dedicated Admin Suite Stylesheet
+   ======================================================== */
+
+@import url('main.css');
+
+/* Admin Layout Elevating Styles */
+.admin-sidebar {
+    position: sticky;
+    top: 96px;
+    z-index: 10;
+}
+
+.stat-card {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.data-table th {
+    letter-spacing: 0.05em;
+}
+
+.data-table td {
+    vertical-align: middle;
+}
