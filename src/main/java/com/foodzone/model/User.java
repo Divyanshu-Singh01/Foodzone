@@ -12,7 +12,13 @@ public class User implements Serializable {
     private String passwordHash;
     private String phone;
     private String address;
-    private String role; // 'CUSTOMER' or 'ADMIN'
+    private String role; // 'CUSTOMER', 'ADMIN', 'DELIVERY'
+    private String vehicleNo;
+    private String vehicleType = "Motorcycle";
+    private String licenseNo;
+    private String emergencyPhone;
+    private boolean isActiveRider = true;
+    private boolean isOnDuty = true;
     private Timestamp createdAt;
 
     public User() {}
@@ -43,6 +49,26 @@ public class User implements Serializable {
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 
+    public String getVehicleNo() { return vehicleNo; }
+    public void setVehicleNo(String vehicleNo) { this.vehicleNo = vehicleNo; }
+
+    public String getVehicleType() { return vehicleType; }
+    public void setVehicleType(String vehicleType) { this.vehicleType = vehicleType; }
+
+    public String getLicenseNo() { return licenseNo; }
+    public void setLicenseNo(String licenseNo) { this.licenseNo = licenseNo; }
+
+    public String getEmergencyPhone() { return emergencyPhone; }
+    public void setEmergencyPhone(String emergencyPhone) { this.emergencyPhone = emergencyPhone; }
+
+    public boolean isActiveRider() { return isActiveRider; }
+    public void setActiveRider(boolean activeRider) { isActiveRider = activeRider; }
+
+    public boolean isOnDuty() { return isOnDuty; }
+    public boolean getIsOnDuty() { return isOnDuty; }
+    public void setOnDuty(boolean onDuty) { isOnDuty = onDuty; }
+    public void setIsOnDuty(boolean onDuty) { isOnDuty = onDuty; }
+
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
 
@@ -54,5 +80,13 @@ public class User implements Serializable {
 
     public boolean isAdmin() {
         return "ADMIN".equalsIgnoreCase(this.role);
+    }
+
+    public boolean isDelivery() {
+        return "DELIVERY".equalsIgnoreCase(this.role);
+    }
+
+    public boolean isCustomer() {
+        return "CUSTOMER".equalsIgnoreCase(this.role) || (!isAdmin() && !isDelivery());
     }
 }

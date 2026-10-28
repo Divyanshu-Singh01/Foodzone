@@ -1,0 +1,20 @@
+/* Admin-specific overrides — all base styles from main.css */
+/* This file intentionally minimal — the design system handles everything */
+
+/* Admin sidebar hover icon glow */
+.admin-nav a:hover i { color: var(--brand); }
+.admin-nav a.active i { color: var(--brand); }
+
+/* Admin table action buttons alignment */
+.data-table td:last-child { white-space: nowrap; }
+
+/* Wide forms in admin panels */
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+}
+
+@media (max-width: 640px) {
+  .admin-form-grid { grid-template-columns: 1fr; }
+}

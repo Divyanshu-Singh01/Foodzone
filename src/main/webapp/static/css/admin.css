@@ -1,29 +1,20 @@
-/* ========================================================
-   FoodZone - Dedicated Admin Suite Stylesheet
-   ======================================================== */
+/* Admin-specific overrides — all base styles from main.css */
+/* This file intentionally minimal — the design system handles everything */
 
-@import url('main.css');
+/* Admin sidebar hover icon glow */
+.admin-nav a:hover i { color: var(--brand); }
+.admin-nav a.active i { color: var(--brand); }
 
-/* Admin Layout Elevating Styles */
-.admin-sidebar {
-    position: sticky;
-    top: 96px;
-    z-index: 10;
+/* Admin table action buttons alignment */
+.data-table td:last-child { white-space: nowrap; }
+
+/* Wide forms in admin panels */
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
 }
 
-.stat-card {
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-}
-
-.data-table th {
-    letter-spacing: 0.05em;
-}
-
-.data-table td {
-    vertical-align: middle;
+@media (max-width: 640px) {
+  .admin-form-grid { grid-template-columns: 1fr; }
 }

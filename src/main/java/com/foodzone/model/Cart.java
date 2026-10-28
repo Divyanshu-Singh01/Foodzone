@@ -14,8 +14,27 @@ public class Cart implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Map<Integer, CartItem> items = new LinkedHashMap<>();
+    private String orderType = "DELIVERY"; // 'DELIVERY' or 'TAKEAWAY'
+    private String couponCode = null;
+    private BigDecimal discountAmount = BigDecimal.ZERO;
 
     public Cart() {}
+
+    public String getOrderType() { return orderType; }
+    public void setOrderType(String orderType) { this.orderType = orderType; }
+
+    public String getCouponCode() { return couponCode; }
+    public BigDecimal getDiscountAmount() { return discountAmount; }
+
+    public void applyCoupon(String code, BigDecimal discount) {
+        this.couponCode = code;
+        this.discountAmount = discount != null ? discount : BigDecimal.ZERO;
+    }
+
+    public void removeCoupon() {
+        this.couponCode = null;
+        this.discountAmount = BigDecimal.ZERO;
+    }
 
     public Collection<CartItem> getItems() {
         return items.values();
@@ -50,6 +69,7 @@ public class Cart implements Serializable {
 
     public void clear() {
         items.clear();
+        removeCoupon();
     }
 
     public int getItemCount() {
@@ -77,10 +97,12 @@ public class Cart implements Serializable {
     }
 
     /**
-     * Free delivery above 500, else flat fee 40.
+     * If Takeaway, delivery is 0. If Delivery: free above 500, else flat fee 40.
      */
     public BigDecimal getDeliveryFee() {
-        if (isEmpty()) return BigDecimal.ZERO;
+        if (isEmpty() || "TAKEAWAY".equalsIgnoreCase(orderType)) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
         BigDecimal subtotal = getSubtotal();
         if (subtotal.compareTo(new BigDecimal("500.00")) >= 0) {
             return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
@@ -90,6 +112,10 @@ public class Cart implements Serializable {
 
     public BigDecimal getTotalAmount() {
         if (isEmpty()) return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
-        return getSubtotal().add(getTaxAmount()).add(getDeliveryFee()).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal total = getSubtotal().add(getTaxAmount()).add(getDeliveryFee()).subtract(discountAmount);
+        if (total.compareTo(BigDecimal.ZERO) < 0) {
+            total = BigDecimal.ZERO;
+        }
+        return total.setScale(2, RoundingMode.HALF_UP);
     }
 }

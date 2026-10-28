@@ -29,6 +29,9 @@ public class CheckoutServlet extends HttpServlet {
 
         if ("/order-confirmation".equals(path)) {
             String orderIdStr = request.getParameter("orderId");
+            if (orderIdStr == null || orderIdStr.trim().isEmpty()) {
+                orderIdStr = request.getParameter("id");
+            }
             if (orderIdStr != null) {
                 try {
                     int orderId = Integer.parseInt(orderIdStr.trim());
@@ -78,10 +81,27 @@ public class CheckoutServlet extends HttpServlet {
             return;
         }
 
+        String orderType = request.getParameter("orderType");
+        if (orderType == null || orderType.trim().isEmpty()) {
+            orderType = cart.getOrderType();
+        }
+        if (orderType == null || (!"TAKEAWAY".equalsIgnoreCase(orderType) && !"DELIVERY".equalsIgnoreCase(orderType))) {
+            orderType = "DELIVERY";
+        }
+        cart.setOrderType(orderType);
+
         String deliveryAddress = request.getParameter("deliveryAddress");
         String contactPhone = request.getParameter("contactPhone");
         String paymentMethod = request.getParameter("paymentMethod");
         String specialNotes = request.getParameter("specialNotes");
+        String landmark = request.getParameter("landmark");
+        String addressType = request.getParameter("addressType");
+        String deliveryInstructions = request.getParameter("deliveryInstructions");
+        String alternatePhone = request.getParameter("alternatePhone");
+
+        if ("TAKEAWAY".equalsIgnoreCase(orderType) && (deliveryAddress == null || deliveryAddress.trim().isEmpty())) {
+            deliveryAddress = "Store Takeaway (FoodZone Central Kitchen, Indirapuram)";
+        }
 
         if (deliveryAddress == null || contactPhone == null ||
             deliveryAddress.trim().isEmpty() || contactPhone.trim().isEmpty()) {
@@ -90,17 +110,28 @@ public class CheckoutServlet extends HttpServlet {
             return;
         }
 
+        // Generate 4-digit secure delivery OTP
+        String deliveryOtp = String.format("%04d", new java.util.Random().nextInt(10000));
+
         Order order = new Order();
         order.setUserId(user.getUserId());
+        order.setOrderType(orderType.toUpperCase());
         order.setSubtotal(cart.getSubtotal());
         order.setTaxAmount(cart.getTaxAmount());
         order.setDeliveryFee(cart.getDeliveryFee());
+        order.setDiscountAmount(cart.getDiscountAmount());
+        order.setCouponCode(cart.getCouponCode());
         order.setTotalAmount(cart.getTotalAmount());
         order.setOrderStatus("PENDING");
         order.setDeliveryAddress(deliveryAddress.trim());
         order.setContactPhone(contactPhone.trim());
         order.setPaymentMethod(paymentMethod != null ? paymentMethod : "Cash on Delivery");
+        order.setDeliveryOtp(deliveryOtp);
         order.setSpecialNotes(specialNotes != null ? specialNotes.trim() : "");
+        order.setLandmark(landmark != null ? landmark.trim() : "");
+        order.setAddressType(addressType != null ? addressType.trim().toUpperCase() : "HOME");
+        order.setDeliveryInstructions(deliveryInstructions != null ? deliveryInstructions.trim() : "");
+        order.setAlternatePhone(alternatePhone != null ? alternatePhone.trim() : "");
 
         List<OrderItem> items = new ArrayList<>();
         for (CartItem ci : cart.getItems()) {

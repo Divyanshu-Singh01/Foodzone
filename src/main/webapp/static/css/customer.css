@@ -1,31 +1,58 @@
-/* ========================================================
-   FoodZone - Customer & Catalog Modular Stylesheet
-   ======================================================== */
+/* Customer-specific overrides — base styles from main.css */
 
-@import url('main.css');
-
-/* Enhanced Menu Card Hover & Animation */
-.food-card {
-    will-change: transform, box-shadow;
+/* Checkout form label helpers */
+.checkout-section-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ink-900);
+  margin-bottom: var(--sp-5);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--ink-100);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
 }
 
-.food-card .food-title {
-    color: var(--dark);
-    font-weight: 700;
+/* Address tag buttons (HOME / WORK / OTHER) */
+.addr-tag-btn {
+  padding: 7px 16px;
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--ink-200);
+  background: var(--ink-0);
+  color: var(--ink-500);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all var(--t-fast) var(--ease);
 }
 
-/* Category Filter Active Indicator */
-.cat-pill.active {
-    background: var(--primary);
-    color: var(--white);
-    border-color: var(--primary);
+.addr-tag-btn:hover,
+.addr-tag-btn.selected {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  box-shadow: var(--shadow-brand-sm);
 }
 
-/* Cart Specific Enhancements */
-.cart-item {
-    transition: background-color 0.2s ease;
+/* Instruction preset chips */
+.instr-chip {
+  padding: 6px 14px;
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--ink-200);
+  background: var(--ink-0);
+  color: var(--ink-500);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  transition: all var(--t-fast) var(--ease);
 }
 
-.cart-item:hover {
-    background-color: var(--gray-50);
+.instr-chip:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: var(--brand-50);
 }

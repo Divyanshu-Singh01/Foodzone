@@ -12,9 +12,9 @@
     <div class="admin-grid">
         <!-- Admin Sidebar Navigation -->
         <aside class="admin-sidebar">
-            <div style="padding-bottom: 16px; margin-bottom: 16px; border-bottom: 1px solid var(--gray-200);">
-                <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--gray-600); letter-spacing: 0.05em;">Management Console</span>
-                <h3 style="font-size: 1.1rem; margin-top: 4px;">Admin Portal</h3>
+            <div class="admin-sidebar-header">
+                <div class="admin-sidebar-eyebrow">Management Console</div>
+                <div class="admin-sidebar-title">Admin Portal</div>
             </div>
             <ul class="admin-nav">
                 <li>
@@ -23,13 +23,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/admin/menu" class="active">
-                        <i class="fa-solid fa-burger"></i> Menu Catalog
+                    <a href="${pageContext.request.contextPath}/admin/orders">
+                        <i class="fa-solid fa-clipboard-list"></i> Live Orders
                     </a>
                 </li>
                 <li>
-                    <a href="${pageContext.request.contextPath}/admin/orders">
-                        <i class="fa-solid fa-clipboard-list"></i> Live Orders
+                    <a href="${pageContext.request.contextPath}/admin/menu" class="active">
+                        <i class="fa-solid fa-burger"></i> Menu Catalog
                     </a>
                 </li>
                 <li>
@@ -37,7 +37,21 @@
                         <i class="fa-solid fa-users"></i> Customers
                     </a>
                 </li>
+                <li>
+                    <a href="${pageContext.request.contextPath}/admin/profile">
+                        <i class="fa-solid fa-user-gear"></i> My Profile
+                    </a>
+                </li>
             </ul>
+
+            <!-- Quick status bar -->
+            <div style="margin:var(--sp-4) 0 0;padding:var(--sp-3) var(--sp-4);background:var(--ink-50);border-radius:var(--r-md);border:1px solid var(--ink-100);">
+                <div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--ink-400);margin-bottom:2px;">Catalog Status</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--ink-700);">
+                    <span class="status-pill-dot" style="width:7px;height:7px;border-radius:50%;background:var(--emerald);display:inline-block;"></span>
+                    Menu In Sync
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content Area -->

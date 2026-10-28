@@ -25,7 +25,7 @@ Ensure the `MySQL80` service is running, then open PowerShell and execute the DD
 
 ```powershell
 # Navigate to the Foodzone project directory
-cd c:\Users\rajku\Desktop\Foodzone
+cd c:\Users\hp\OneDrive\Desktop\Foodzone
 
 # Import schema.sql into MySQL (replace 'vansh2025' with your root password)
 Get-Content schema.sql | & "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -pvansh2025
@@ -60,10 +60,18 @@ db.driver=com.mysql.cj.jdbc.Driver
 
 You can compile the Java source files and generate `target/foodzone.war` using any of the following methods:
 
-#### Method A: 1-Click PowerShell Build Script (Recommended)
+#### Method A: 1-Click PowerShell Script (Build + Deploy + Launch Server)
 ```powershell
 .\build.ps1
 ```
+> **What this does in 1 click:**
+> 1. Compiles all Java source code
+> 2. Packages `target/foodzone.war`
+> 3. Deploys directly to `C:\apache-tomcat-10.1\webapps\foodzone`
+> 4. Starts the Apache Tomcat 10.1 server (if not already running)
+> 5. Automatically launches your default browser at `http://localhost:8080/foodzone/home`
+>
+> *(To compile only without launching the server, pass: `.\build.ps1 -BuildOnly`)*
 
 #### Method B: 1-Click Windows Batch Script
 ```cmd
@@ -144,23 +152,36 @@ Start-Process "http://localhost:8080/foodzone/home"
 #### Application Endpoints:
 * **Customer Home:** [http://localhost:8080/foodzone/home](http://localhost:8080/foodzone/home)
 * **Food Menu & Ordering:** [http://localhost:8080/foodzone/menu](http://localhost:8080/foodzone/menu)
-* **Shopping Cart:** [http://localhost:8080/foodzone/cart](http://localhost:8080/foodzone/cart)
-* **Checkout & Payment:** [http://localhost:8080/foodzone/checkout](http://localhost:8080/foodzone/checkout)
-* **Customer Order History:** [http://localhost:8080/foodzone/orders](http://localhost:8080/foodzone/orders)
+* **Shopping Cart & Coupons:** [http://localhost:8080/foodzone/cart](http://localhost:8080/foodzone/cart)
+* **Checkout (Structured Address & Domino's Presets):** [http://localhost:8080/foodzone/checkout](http://localhost:8080/foodzone/checkout)
+* **Domino's Live Tracker & 30-Min Guarantee:** [http://localhost:8080/foodzone/order-details?id=1](http://localhost:8080/foodzone/order-details)
+* **Customer Order History & 5-Star Reviews:** [http://localhost:8080/foodzone/orders](http://localhost:8080/foodzone/orders)
+* **👤 Customer Profile View:** [http://localhost:8080/foodzone/profile](http://localhost:8080/foodzone/profile)
+* **🛵 Delivery Partner Hub & Progressive Trips:** [http://localhost:8080/foodzone/delivery/dashboard](http://localhost:8080/foodzone/delivery/dashboard)
+* **🛵 Delivery Partner Profile & Fleet Credentials:** [http://localhost:8080/foodzone/delivery/profile](http://localhost:8080/foodzone/delivery/profile)
 * **Admin Dashboard:** [http://localhost:8080/foodzone/admin/dashboard](http://localhost:8080/foodzone/admin/dashboard)
-* **Admin Order Pipeline:** [http://localhost:8080/foodzone/admin/orders](http://localhost:8080/foodzone/admin/orders)
+* **Admin Order Pipeline & Rider Dispatch:** [http://localhost:8080/foodzone/admin/orders](http://localhost:8080/foodzone/admin/orders)
 * **Admin Menu Catalog:** [http://localhost:8080/foodzone/admin/menu](http://localhost:8080/foodzone/admin/menu)
+* **👨‍🍳 System Administrator Profile:** [http://localhost:8080/foodzone/admin/profile](http://localhost:8080/foodzone/admin/profile)
 
 ---
 
-## 🔑 Demo Credentials
+## 🔑 Demo Credentials (3-Entity Commercial Architecture)
 
-| Role | Email | Password | Access Privileges |
+| Entity Role | Email | Password | Access Privileges |
 | :--- | :--- | :--- | :--- |
-| **System Administrator** | `admin@foodzone.com` | `admin123` | Full Admin Portal (`/admin/*`), live orders, menu CRUD, customer records |
-| **Demo Customer** | `customer@gmail.com` | `user123` | Menu catalog, shopping cart, checkout, order history & receipts |
+| **System Administrator** | `admin@foodzone.com` | `admin123` | Full Admin Portal (`/admin/*`), live orders, menu CRUD, customer records, **Rider dispatch assignment** |
+| **Delivery Partner** | `rider@foodzone.com` | `rider123` | Dedicated Mobile-first Rider Dashboard (`/delivery/dashboard`), navigation maps, customer call links, **4-Digit Doorstep Delivery OTP verification** |
+| **Customer** | `customer@gmail.com` | `user123` | Menu catalog, shopping cart, promo coupons, takeaway toggle, checkout, **Domino's 4-stage visual order tracker**, OTP card, self-cancellation |
 
-> **Tip:** On the [Sign In page](http://localhost:8080/foodzone/login), click **Customer Demo** or **Admin Demo** to auto-fill credentials with a single click.
+> **Tip:** On the [Sign In page](http://localhost:8080/foodzone/login), click **Customer**, **Admin**, or **Rider Demo** to auto-fill credentials with a single click.
+
+### 🎟️ Active Demo Promo Codes
+| Coupon Code | Discount | Minimum Order | Description |
+| :--- | :--- | :--- | :--- |
+| `WELCOME50` | **₹50 OFF** | ₹200 | Flat ₹50 off on first order |
+| `DOM100` | **₹100 OFF** | ₹400 | Domino's party special discount |
+| `FREEDEL` | **Free Delivery** | ₹150 | Waives ₹40 delivery fee |
 
 ---
 

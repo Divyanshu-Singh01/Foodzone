@@ -25,8 +25,10 @@ CREATE TABLE users (
     email VARCHAR(120) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     phone VARCHAR(20) NOT NULL,
+    vehicle_no VARCHAR(30) NULL,
+    is_active_rider BOOLEAN DEFAULT TRUE,
     address TEXT,
-    role ENUM('CUSTOMER', 'ADMIN') DEFAULT 'CUSTOMER',
+    role ENUM('CUSTOMER', 'ADMIN', 'DELIVERY') DEFAULT 'CUSTOMER',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
@@ -64,19 +66,27 @@ CREATE TABLE food_items (
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
+    order_type ENUM('DELIVERY', 'TAKEAWAY') DEFAULT 'DELIVERY',
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     subtotal DECIMAL(10, 2) NOT NULL,
     tax_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     delivery_fee DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    discount_amount DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
     total_amount DECIMAL(10, 2) NOT NULL,
     order_status ENUM('PENDING', 'PREPARING', 'OUT_FOR_DELIVERY', 'COMPLETED', 'CANCELLED') DEFAULT 'PENDING',
     delivery_address TEXT NOT NULL,
     contact_phone VARCHAR(20) NOT NULL,
     payment_method VARCHAR(30) DEFAULT 'Cash on Delivery',
+    delivery_otp VARCHAR(6) NULL,
+    coupon_code VARCHAR(30) NULL,
+    rider_id INT NULL,
     special_notes TEXT,
     CONSTRAINT fk_order_user
         FOREIGN KEY (user_id) REFERENCES users(user_id)
-        ON DELETE CASCADE ON UPDATE CASCADE
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_order_rider
+        FOREIGN KEY (rider_id) REFERENCES users(user_id)
+        ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 -- --------------------------------------------------------
@@ -101,10 +111,17 @@ CREATE TABLE order_items (
 -- Seed Data for Testing & Demonstration
 -- ========================================================
 
--- Users (1 Admin, 1 Customer)
-INSERT INTO users (full_name, email, password_hash, phone, address, role) VALUES
-('System Administrator', 'admin@foodzone.com', 'admin123', '9876543210', 'FoodZone HQ, Suite 101', 'ADMIN'),
-('Rahul Sharma', 'customer@gmail.com', 'user123', '9123456780', 'Flat 402, Green Valley Apts, MG Road', 'CUSTOMER');
+-- Users (1 Admin, 1 Customer, 1 Delivery Partner)
+INSERT INTO users (full_name, email, password_hash, phone, address, vehicle_no, role) VALUES
+('System Administrator', 'admin@foodzone.com', 'admin123', '9876543210', 'FoodZone HQ, Suite 101', NULL, 'ADMIN'),
+('Rahul Sharma', 'customer@gmail.com', 'user123', '9123456780', 'Flat 402, Green Valley Apts, MG Road', NULL, 'CUSTOMER'),
+('Vikram Singh (Rider)', 'rider@foodzone.com', 'rider123', '9876500001', 'Delivery Hub North', 'DL 04 AB 1234', 'DELIVERY');
+
+-- Coupons
+INSERT INTO coupons (coupon_code, discount_type, discount_value, min_order_amount, is_active) VALUES
+('WELCOME50', 'FLAT', 50.00, 200.00, TRUE),
+('DOM100', 'FLAT', 100.00, 400.00, TRUE),
+('FREEDEL', 'FREE_DELIVERY', 40.00, 150.00, TRUE);
 
 -- Categories
 INSERT INTO categories (category_name, description, icon_class) VALUES
@@ -127,10 +144,3 @@ INSERT INTO food_items (category_id, food_name, description, price, image_url, i
 (4, 'Fresh Mint Mojito', 'Crushed fresh garden mint, zesty lime juice, and sparkling soda over crushed ice.', 89.00, 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600', TRUE, TRUE),
 (5, 'Warm Chocolate Lava Cake', 'Decadent warm dark chocolate sponge with an oozing liquid chocolate molten center.', 149.00, 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=600', TRUE, TRUE);
 
--- Initial Sample Order
-INSERT INTO orders (user_id, subtotal, tax_amount, delivery_fee, total_amount, order_status, delivery_address, contact_phone, payment_method) VALUES
-(2, 578.00, 28.90, 40.00, 646.90, 'PENDING', 'Flat 402, Green Valley Apts, MG Road', '9123456780', 'Cash on Delivery');
-
-INSERT INTO order_items (order_id, food_id, quantity, unit_price, subtotal) VALUES
-(1, 1, 1, 249.00, 249.00),
-(1, 2, 1, 329.00, 329.00);
